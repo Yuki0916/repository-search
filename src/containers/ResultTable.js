@@ -1,17 +1,25 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import ResultTableItem from '../components/ResultTable'
 
-class resultTable extends Component {
+class ResultTable extends Component {
   render() {
-    return <div>resultTable</div>
+    const { searchResultList } = this.props
+    return (
+      <div>
+        <ResultTableItem searchResultList={searchResultList} />
+      </div>
+    )
   }
 }
 
-const mapStateToProps = state => ({})
+const mapStateToProps = state => ({
+  searchResultList: state.dataStore.SearchResultList,
+})
 
 const mapDispatchToProps = {}
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(resultTable)
+)(ResultTable)
