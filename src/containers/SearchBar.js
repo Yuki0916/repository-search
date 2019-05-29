@@ -1,24 +1,33 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import * as ActionCenter from '../actions'
 import SearchBarItem from '../components/SearchBar'
 
-class searchBar extends Component {
+const styles = {
+  Header: {
+    marginTop: '10%',
+  },
+}
+
+class SearchBar extends Component {
   initialState = {
-    search_text: '',
+    searchText: '',
   }
   state = this.initialState
 
-  changeContent = e => this.setState({ search_text: e.target.value })
+  changeContent = e => this.setState({ searchText: e.target.value })
   handleEnter = e => {
     if (e.keyCode === 13) this.handleSearch()
   }
   handleSearch = () => {
-    console.log('call search API')
+    const { searchText } = this.state
+    !!searchText && this.props.fetchSearchRepository(searchText)
   }
 
   render() {
     return (
-      <header>
+      <header style={styles.Header}>
         <SearchBarItem
           handleEnter={this.handleEnter}
           handleSearch={this.handleSearch}
@@ -29,11 +38,15 @@ class searchBar extends Component {
   }
 }
 
-const mapStateToProps = state => ({})
+const mapStateToProps = state => ({
+  searchResult: state.dataStore.SearchResult,
+})
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(ActionCenter, dispatch)
+}
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(searchBar)
+)(SearchBar)
