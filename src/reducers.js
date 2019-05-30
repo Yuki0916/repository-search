@@ -1,6 +1,13 @@
 import { combineReducers } from 'redux'
 import Moment from 'moment'
-import { SEARCH_RESULT, ERROR_HANDEL, LOADING_ON, LOADING_OFF } from './actions'
+import {
+  SEARCH_RESULT,
+  SEARCH_REPOSITORY,
+  CLEAN_SEARCH_REPOSITORY,
+  ERROR_HANDEL,
+  LOADING_ON,
+  LOADING_OFF,
+} from './actions'
 
 function dataStore(
   state = {
@@ -10,6 +17,11 @@ function dataStore(
     QueryString: '',
     ErrorMessage: '',
     Loading: false,
+    Dialog: {
+      BranchList: [],
+      CommitList: [],
+      RepositoryName: '',
+    },
   },
   action
 ) {
@@ -21,18 +33,40 @@ function dataStore(
         return {
           RepositoryName: item.name,
           OwnerName: item.owner.login,
-          CreatedDate: Moment(item.created_at).format('L'),
-          UpdatedDate: Moment(item.updated_at).format('L'),
+          CreatedDate: Moment(item.created_at).format('YYYY/MM/DD'),
+          UpdatedDate: Moment(item.updated_at).format('YYYY/MM/DD'),
           StarCount: item.stargazers_count,
           Watchers: item.watchers,
         }
       })
-      console.log(newSearchResultList)
       return {
         ...state,
         SearchResultList: newSearchResultList,
-        PaginationCount: pagination_count > 10 ? 10 : pagination_count,
+        PaginationCount: pagination_count > 100 ? 100 : pagination_count,
         QueryString: inputContent,
+      }
+
+    case SEARCH_REPOSITORY:
+      const {
+        data: { resBranch, resCommit, repositoryName },
+      } = action
+
+      return {
+        ...state,
+        Dialog: {
+          BranchList: resBranch.map(item => item.name).slice(0, 10),
+          CommitList: resCommit.map(item => item.commit.message).slice(0, 10),
+          RepositoryName: repositoryName,
+        },
+      }
+    case CLEAN_SEARCH_REPOSITORY:
+      return {
+        ...state,
+        Dialog: {
+          BranchList: [],
+          CommitList: [],
+          RepositoryName: '',
+        },
       }
     case ERROR_HANDEL:
       console.error(`ERROR_HANDEL ${action.data}`)
@@ -45,6 +79,7 @@ function dataStore(
 function pageControl(
   state = {
     Loading: false,
+    Dialog: false,
   },
   action
 ) {
@@ -58,6 +93,16 @@ function pageControl(
       return {
         ...state,
         Loading: false,
+      }
+    case SEARCH_REPOSITORY:
+      return {
+        ...state,
+        Dialog: true,
+      }
+    case CLEAN_SEARCH_REPOSITORY:
+      return {
+        ...state,
+        Dialog: false,
       }
     default:
       return state
