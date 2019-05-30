@@ -19,11 +19,18 @@ class Pagination extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     const nowTotalPage = this.props.paginationCount
     const nextTotalPage = nextProps.paginationCount
+    const nowQueryString = this.props.queryString
+    const nextQueryString = nextProps.queryString
+    let isChange = false
+    if (nowQueryString !== nextQueryString && nowQueryString !== '') {
+      this.setState({ NowPage: 1 })
+      isChange = true
+    }
     if (nowTotalPage !== nextTotalPage) {
       this.setState({ TotalPage: nextTotalPage })
-      return false
+      isChange = true
     }
-    return true
+    return !isChange
   }
 
   render() {
