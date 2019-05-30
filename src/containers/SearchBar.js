@@ -6,7 +6,7 @@ import SearchBarItem from '../components/SearchBar'
 
 const styles = {
   Header: {
-    marginTop: '10%',
+    paddingTop: '10%',
   },
 }
 

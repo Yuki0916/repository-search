@@ -6,7 +6,14 @@ const styles = {
     margin: '0 auto',
   },
   SearchMain: {
-    border: '1px solid black',
+    marginTop: '1vh',
+  },
+  Input: {
+    padding: '5px',
+  },
+  Button: {
+    marginLeft: '5px',
+    padding: '5px',
   },
 }
 
@@ -17,6 +24,7 @@ export default class SearchBar extends Component {
         <label htmlFor="search_input">Github Repository Search</label>
         <div style={styles.SearchMain}>
           <input
+            style={styles.Input}
             id="search_input"
             type="text"
             name="search_input"
@@ -25,6 +33,7 @@ export default class SearchBar extends Component {
             onChange={this.props.onChange}
           />
           <button
+            style={styles.Button}
             type="submit"
             name="search_submit"
             onClick={this.props.handleSearch}
