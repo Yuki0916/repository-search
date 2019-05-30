@@ -2,6 +2,7 @@
   "name": "repository-search",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://yuki0916.github.io/repository-search/",
   "dependencies": {
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
@@ -16,7 +17,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -34,6 +37,7 @@
     ]
   },
   "devDependencies": {
+    "gh-pages": "^2.0.1",
     "redux-devtools": "^3.5.0"
   }
 }
